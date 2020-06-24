@@ -2,18 +2,19 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { history } from './helpers/history';
 // components
-import List from './components/list';
-import Purchase from './components/purchase';
+import ProductList from './components/ProductList.jsx';
+import ProductDetails from './components/ProductDetails.jsx';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <Router history={history}>
-        <Switch>
-          <Route exact path='/' component={List} />
-          <Route exact path='/purchase' component={Purchase} />
-        </Switch>
-      </Router>
-    );
-  }
+export default function App() {
+  return (
+    <Router history={history}>
+      <Switch>
+        <Route path='/' component={ProductList} />
+        <Route
+          path='/product/:productId'
+          render={(p) => (<ProductDetails {...p} />)}
+        />
+      </Switch>
+    </Router>
+  );
 }
