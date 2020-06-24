@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {AppProvider} from "@shopify/polaris";
+import ja from '@shopify/polaris/locales/ja.json';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppProvider i18n={ja}>
+      <App />
+    </AppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
