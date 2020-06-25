@@ -6,9 +6,9 @@ import {
 } from '@shopify/polaris';
 
 import { createStore } from 'redux'
-import addProduct from '../reducer/productReducer'
+import productReducer from '../reducer/productReducer'
 
-const store = createStore(addProduct)
+const store = createStore(productReducer)
 
 export default function ProductList() {
   const [products] = useState([
@@ -16,7 +16,7 @@ export default function ProductList() {
     {id: 2, name: "product B"}
   ]);
 
-  store.dispatch(addProduct({id: 3, name: "product C"}))
+  store.dispatch(productReducer({id: 3, name: "product C"}))
 
   return (
     <div>
