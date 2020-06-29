@@ -9,11 +9,8 @@ export default function App() {
   return (
     <Router history={history}>
       <Switch>
-        <Route path='/' component={ProductList} />
-        <Route
-          path='/product/:productId'
-          render={(p) => (<ProductDetails {...p} />)}
-        />
+        <Route exact path='/' component={ProductList} />
+        <Route exact path='/product/:productId' component={ProductDetails} />
       </Switch>
     </Router>
   );

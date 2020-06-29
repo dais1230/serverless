@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Link,
+  Button,
   List,
   Page
 } from '@shopify/polaris';
 
 import { createStore } from 'redux'
-import productReducer from '../reducer/productReducer'
+import todoApp from '../reducers/index'
+import {
+  addTodo
+} from '../actions/index'
 
-const store = createStore(productReducer)
+const store = createStore(todoApp)
 
 export default function ProductList() {
   const [products] = useState([
@@ -16,7 +20,16 @@ export default function ProductList() {
     {id: 2, name: "product B"}
   ]);
 
-  store.dispatch(productReducer({id: 3, name: "product C"}))
+  // console.log(store.getState())
+  // store.dispatch(productReducer({id: 3, name: "product C"}))
+
+  function click () {
+    store.dispatch(addTodo('new'))
+    console.log(store.getState())
+  }
+  // function goProductDetail(id) {
+  //   store.dispatch(goProductDetail(id))
+  // }
 
   return (
     <div>
@@ -24,10 +37,11 @@ export default function ProductList() {
         <List sectioned>
           {products.map(p => (
             <List.Item key={p.id}>
-              <p><Link url={`/product/${p.id}`}>{p.name}</Link></p>
+              <Link to={`/product/${p.id}`}>{p.name}</Link>
             </List.Item>
           ))}
         </List>
+        <Button onClick={click}>購入する</Button>
       </Page>
     </div>
   );

@@ -9,7 +9,7 @@ import ja from '@shopify/polaris/locales/ja.json';
 ReactDOM.render(
   <React.StrictMode>
     <AppProvider i18n={ja}>
-      <App />
+        <App />
     </AppProvider>
   </React.StrictMode>,
   document.getElementById('root')
