@@ -1,18 +1,18 @@
 import { combineReducers } from 'redux'
 import {
-  ADD_TODO,
-  TOGGLE_TODO,
+  ADD_PRODUCT,
+  // TOGGLE_TODO,
   SET_VISIBILITY_FILTER,
   VisibilityFilters
 } from '../actions/index'
 const { SHOW_ALL } = VisibilityFilters
 
 const initialState = {
-  todos: [],
   products: [
     {id: 1, name: "product A"},
     {id: 2, name: "product B"}
-  ]
+  ],
+  selectedProducts: []
 }
 
 function visibilityFilter(state = SHOW_ALL, action) {
@@ -24,25 +24,22 @@ function visibilityFilter(state = SHOW_ALL, action) {
   }
 }
 
-function todos(state = [], action) {
+function productReducer(state = initialState, action) {
   switch (action.type) {
-    case ADD_TODO:
-      return [
+    case ADD_PRODUCT:
+      return {
         ...state,
-        {
-          text: action.text,
-          completed: false
-        }
-      ]
-    case TOGGLE_TODO:
-      return state.map((todo, index) => {
-        if (index === action.index) {
-          return Object.assign({}, todo, {
-            completed: !todo.completed
-          })
-        }
-        return todo
-      })
+        selectedProducts: [...state.selectedProducts, action.product]
+      }
+    // case TOGGLE_TODO:
+    //   return state.map((todo, index) => {
+    //     if (index === action.index) {
+    //       return Object.assign({}, todo, {
+    //         completed: !todo.completed
+    //       })
+    //     }
+    //     return todo
+    //   })
     default:
       return state
   }
@@ -50,7 +47,7 @@ function todos(state = [], action) {
 
 const todoApp = combineReducers({
   visibilityFilter,
-  todos
+  productReducer
 })
 
 export default todoApp

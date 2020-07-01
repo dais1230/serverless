@@ -1,36 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
-  Button,
   List,
   Page
 } from '@shopify/polaris';
 
-import { createStore } from 'redux'
-import todoApp from '../reducers/index'
-import {
-  addTodo
-} from '../actions/index'
+import { addProduct } from '../actions/index';
 
-const store = createStore(todoApp)
-
-export default function ProductList() {
-  const [products] = useState([
-    {id: 1, name: "product A"},
-    {id: 2, name: "product B"}
-  ]);
-
-  // console.log(store.getState())
-  // store.dispatch(productReducer({id: 3, name: "product C"}))
-
-  function click () {
-    store.dispatch(addTodo('new'))
-    console.log(store.getState())
-  }
-  // function goProductDetail(id) {
-  //   store.dispatch(goProductDetail(id))
-  // }
-
+const ProductList = ({ products }) => {
   return (
     <div>
       <Page>
@@ -41,8 +19,20 @@ export default function ProductList() {
             </List.Item>
           ))}
         </List>
-        <Button onClick={click}>購入する</Button>
       </Page>
     </div>
-  );
+  )
 }
+
+const mapStateToProps = state => ({
+  products: state.productReducer.products,
+})
+
+const mapDispatchToProps = dispatch => ({
+  addProduct: data => dispatch(addProduct(data))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductList)
