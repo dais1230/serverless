@@ -6,6 +6,7 @@ import {
   Page
 } from '@shopify/polaris';
 import { addProduct } from '../actions/index';
+import Header from './Header';
 
 const ProductDetails = ({ addProduct }) => {
   let { productId } = useParams();
@@ -16,6 +17,7 @@ const ProductDetails = ({ addProduct }) => {
 
   return (
     <div>
+      <Header />
       <Page>
         <p>{productId}</p>
         <Button onClick={handleClick}>カートに追加</Button>

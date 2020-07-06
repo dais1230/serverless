@@ -5,36 +5,44 @@ import {
   List,
   Page
 } from '@shopify/polaris';
-
 import { addProduct } from '../actions/index';
 import Header from './Header';
 
-const ProductList = ({ products }) => {
+const Cart = ({ products }) => {
+  var purchaseButton;
+if (products.length > 0) {
+  purchaseButton = <Link to={'/purchase'}>購入画面へ</Link>;
+} else {
+  purchaseButton = <p>追加された商品はありません</p>;
+}
+
   return (
     <div>
       <Header />
       <Page>
+        <p>カート一覧</p>
         <List sectioned>
           {products.map((p, index) => (
             <List.Item key={index}>
-              <Link to={`/product/${p.id}`}>{p.name}</Link>
+              <p>{p.name}</p>
             </List.Item>
           ))}
         </List>
+        {purchaseButton}
       </Page>
     </div>
   )
 }
 
 const mapStateToProps = state => ({
-  products: state.productReducer.products
+  products: state.productReducer.selectedProducts
 })
 
 const mapDispatchToProps = dispatch => ({
-  addProduct: data => dispatch(addProduct(data))
+  addProduct: product => dispatch(addProduct(product))
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductList)
+)(Cart)
