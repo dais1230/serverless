@@ -15,15 +15,11 @@ const styles = {
 }
 
 const Header = (selectedProducts) => {
-  const handle  = () => {
-    console.log(selectedProducts)
-  }
   return (
     <div style={styles.header}>
       <Link to={'/cart'}>
         <p style={styles.cart}>カート({selectedProducts.selectedProducts.length})</p>
       </Link>
-      <p onClick={handle}>aaa</p>
     </div>
   )
 }
