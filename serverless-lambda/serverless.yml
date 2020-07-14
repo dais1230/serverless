@@ -20,6 +20,10 @@ org: dkatsuta1230
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
 
+
+endpoints:
+  GET - https://6r3b08rqae.execute-api.ap-northeast-1.amazonaws.com/dev/getProducts
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -30,20 +34,16 @@ provider:
 #  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - dynamodb:Query
+      - dynamodb:Scan
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+    Resource: arn:aws:dynamodb:ap-northeast-1:975298253653:table/Product
 
 # you can define service wide environment variables here
 #  environment:
@@ -63,8 +63,8 @@ functions:
     handler: handler.getProducts
     events:
       - http:
-        path: getProducts
-        method: get
+          path: getProducts
+          method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

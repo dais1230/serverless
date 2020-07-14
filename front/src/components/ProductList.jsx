@@ -15,10 +15,11 @@ const ProductList = ({ products }) => {
     axios({
       mode: "cors",
       method: "GET",
-      url: "https://bfhu96h1w4.execute-api.ap-northeast-1.amazonaws.com/default/getProducts",
+      url: "https://6r3b08rqae.execute-api.ap-northeast-1.amazonaws.com/dev/getProducts",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
+        mode: 'cors',
       }
     }).then(res => {
       console.log(res.data);
