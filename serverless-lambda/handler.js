@@ -1,12 +1,13 @@
 'use strict';
 
-module.exports.getProducts = async event => {
+module.exports.getProducts = (event, context, callback) => {
   return {
     statusCode: 200,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",
-      "Access-Control-Allow-Methods": "*"
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Request-Headers":"*"
     },
     body: JSON.stringify(
       {

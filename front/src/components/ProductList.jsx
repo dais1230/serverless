@@ -17,9 +17,7 @@ const ProductList = ({ products }) => {
       method: "GET",
       url: "https://6r3b08rqae.execute-api.ap-northeast-1.amazonaws.com/dev/getProducts",
       headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        mode: 'cors',
+        "Content-Type": "application/json"
       }
     }).then(res => {
       console.log(res.data);
