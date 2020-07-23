@@ -18,7 +18,9 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
-    "serverless-http": "^2.5.0"
+    "serverless-http": "^2.5.0",
+    "shopify-api-node": "^3.3.2",
+    "shopify-node-api": "^1.11.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -12,16 +12,14 @@ import Header from './Header';
 const ProductList = ({ products }) => {
 
   useEffect(() => {
-    axios({
-      mode: "cors",
-      method: "GET",
-      url: "https://6r3b08rqae.execute-api.ap-northeast-1.amazonaws.com/dev/getProducts",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(res => {
-      console.log(res.data);
-    });
+    const fetchData = async () => {
+      const response = await axios.get('https://d0jetp9lk6.execute-api.ap-northeast-1.amazonaws.com/default/lambda_serverless_handler');
+      
+      const title = response.data
+    	console.log(response.data);
+    }
+    
+    fetchData();
   }, []);
 
   return (
