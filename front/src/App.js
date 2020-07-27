@@ -9,9 +9,9 @@ import Purchase from './components/Purchase';
 
 import { Provider } from 'react-redux';
 import { createStore } from 'redux'
-import todoApp from '../src/reducers/index'
+import reducers from '../src/reducers/index'
 
-const store = createStore(todoApp)
+const store = createStore(reducers)
 
 export default function App() {
   return (

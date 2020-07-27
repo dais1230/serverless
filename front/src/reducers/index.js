@@ -1,53 +1,49 @@
 import { combineReducers } from 'redux'
 import {
+  FETCH_PRODUCTS_PENDING,
+  FETCH_PRODUCTS_SUCCESS,
+  FETCH_PRODUCTS_ERROR,
   ADD_PRODUCT,
-  // TOGGLE_TODO,
-  SET_VISIBILITY_FILTER,
-  VisibilityFilters
 } from '../actions/index'
-const { SHOW_ALL } = VisibilityFilters
 
 const initialState = {
-  products: [
-    {id: 1, name: "product A"},
-    {id: 2, name: "product B"}
-  ],
+  error: null,
+  pending: false,
+  products: [],
   selectedProducts: []
-}
-
-function visibilityFilter(state = SHOW_ALL, action) {
-  switch (action.type) {
-    case SET_VISIBILITY_FILTER:
-      return action.filter
-    default:
-      return state
-  }
 }
 
 function productReducer(state = initialState, action) {
   switch (action.type) {
+    case FETCH_PRODUCTS_PENDING:
+      return {
+        ...state,
+        pending: true
+      }
+    case FETCH_PRODUCTS_SUCCESS:
+      return {
+        ...state,
+        pending: false,
+        products: action.payload
+      }
+    case FETCH_PRODUCTS_ERROR:
+      return {
+        ...state,
+        pending: false,
+        error: action.error
+      }
     case ADD_PRODUCT:
       return {
         ...state,
         selectedProducts: [...state.selectedProducts, action.product]
       }
-    // case TOGGLE_TODO:
-    //   return state.map((todo, index) => {
-    //     if (index === action.index) {
-    //       return Object.assign({}, todo, {
-    //         completed: !todo.completed
-    //       })
-    //     }
-    //     return todo
-    //   })
     default:
       return state
   }
 }
 
-const todoApp = combineReducers({
-  visibilityFilter,
+const reducers = combineReducers({
   productReducer
 })
 
-export default todoApp
+export default reducers

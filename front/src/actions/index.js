@@ -2,37 +2,27 @@
  * action types
  */
 
+export const FETCH_PRODUCTS_PENDING = 'FETCH_PRODUCTS_PENDING'
+export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS'
+export const FETCH_PRODUCTS_ERROR = 'FETCH_PRODUCTS_ERROR'
 export const ADD_PRODUCT = 'ADD_PRODUCT'
-export const TOGGLE_TODO = 'TOGGLE_TODO'
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
-export const GO_PRODUCT_DETAIL = 'GO_PRODUCT_DETAIL'
-
-/*
- * other constants
- */
-
-export const VisibilityFilters = {
-  SHOW_ALL: 'SHOW_ALL',
-  SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
-}
-
 /*
  * action creators
  */
 
+export function fetchProductsPending() {
+  return { type: FETCH_PRODUCTS_PENDING }
+}
+
+export function fetchProductsSuccess(products) {
+  return { type: FETCH_PRODUCTS_SUCCESS, products: products }
+}
+
+export function fetchProductsError(error) {
+  return { type: FETCH_PRODUCTS_ERROR, error: error }
+}
+
+
 export function addProduct(product) {
   return { type: ADD_PRODUCT, product }
-}
-
-export function toggleTodo(index) {
-  return { type: TOGGLE_TODO, index }
-}
-
-export function setVisibilityFilter(filter) {
-  return { type: SET_VISIBILITY_FILTER, filter }
-}
-
-export function goProductDetail(productId) {
-    return { type: GO_PRODUCT_DETAIL, productId }
 }

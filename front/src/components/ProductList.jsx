@@ -5,21 +5,15 @@ import {
   List,
   Page
 } from '@shopify/polaris';
-import axios from 'axios';
+
 import { addProduct } from '../actions/index';
+import { fetchProducts } from '../actions/fetchProducts';
 import Header from './Header';
 
 const ProductList = ({ products }) => {
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get('https://d0jetp9lk6.execute-api.ap-northeast-1.amazonaws.com/default/lambda_serverless_handler');
-      
-      const title = response.data
-    	console.log(response.data);
-    }
-    
-    fetchData();
+    fetchProducts()
   }, []);
 
   return (
@@ -43,6 +37,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  fetchProducts: () => dispatch(fetchProducts()),
   addProduct: data => dispatch(addProduct(data))
 })
 
