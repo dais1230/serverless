@@ -5,11 +5,19 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {AppProvider} from "@shopify/polaris";
 import ja from '@shopify/polaris/locales/ja.json';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux'
+import rootReducer from '../src/reducers/index'
+import thunk from 'redux-thunk';
+
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
   <React.StrictMode>
       <AppProvider i18n={ja}>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </AppProvider>
   </React.StrictMode>,
   document.getElementById('root')

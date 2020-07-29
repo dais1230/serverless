@@ -21,10 +21,11 @@ function productReducer(state = initialState, action) {
         pending: true
       }
     case FETCH_PRODUCTS_SUCCESS:
+      console.log(action)
       return {
         ...state,
         pending: false,
-        products: action.payload
+        products: [...state.products, action.products]
       }
     case FETCH_PRODUCTS_ERROR:
       return {
@@ -33,6 +34,7 @@ function productReducer(state = initialState, action) {
         error: action.error
       }
     case ADD_PRODUCT:
+      console.log(action)
       return {
         ...state,
         selectedProducts: [...state.selectedProducts, action.product]
@@ -42,8 +44,8 @@ function productReducer(state = initialState, action) {
   }
 }
 
-const reducers = combineReducers({
+const rootReducer = combineReducers({
   productReducer
 })
 
-export default reducers
+export default rootReducer

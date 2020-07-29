@@ -12,7 +12,7 @@ const ProductDetails = ({ addProduct }) => {
   let { productId } = useParams();
 
   const handleClick = () => {
-    addProduct({id: 3, name: "product C"})
+    addProduct({id: 3, title: "product C"})
   }
 
   return (
