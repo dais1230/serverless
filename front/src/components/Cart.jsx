@@ -5,16 +5,23 @@ import {
   List,
   Page
 } from '@shopify/polaris';
-import { addProduct } from '../actions/index';
 import Header from './Header';
 
-const Cart = ({ products }) => {
-  var purchaseButton;
-if (products.length > 0) {
-  purchaseButton = <Link to={'/purchase'}>購入画面へ</Link>;
-} else {
-  purchaseButton = <p>追加された商品はありません</p>;
-}
+const Cart = ({ selectedProducts }) => {
+  let purchaseButton;
+  if (selectedProducts.length > 0) {
+    purchaseButton = <Link to={'/purchase'}>購入画面へ</Link>;
+  } else {
+    purchaseButton = <p>追加された商品はありません</p>;
+  }
+
+  const totalPrice = () => {
+    let totalPrice = 0
+    selectedProducts.map(sp => {
+      return totalPrice += parseInt(sp.price, 10)
+    })
+    return totalPrice
+  }
 
   return (
     <div>
@@ -22,12 +29,14 @@ if (products.length > 0) {
       <Page>
         <p>カート一覧</p>
         <List sectioned>
-          {products.map((p, index) => (
+          {selectedProducts.map((p, index) => (
             <List.Item key={index}>
-              <p>{p.name}</p>
+              <p>{p.title} / {p.price}円</p>
+              <img alt="product_img" src={p.images} width="64px" height="64px" />
             </List.Item>
           ))}
         </List>
+          <p>合計金額 {totalPrice()}円</p>
         {purchaseButton}
       </Page>
     </div>
@@ -35,14 +44,9 @@ if (products.length > 0) {
 }
 
 const mapStateToProps = state => ({
-  products: state.productReducer.selectedProducts
-})
-
-const mapDispatchToProps = dispatch => ({
-  addProduct: product => dispatch(addProduct(product))
+  selectedProducts: state.productReducer.selectedProducts
 })
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(Cart)

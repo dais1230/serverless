@@ -12,30 +12,34 @@ export const ADD_PRODUCT = 'ADD_PRODUCT'
  * action creators
  */
 
+export function fetchProducts() {
+  return async dispatch => {
+    dispatch(fetchProductsPending())
+    await axios.get('https://d0jetp9lk6.execute-api.ap-northeast-1.amazonaws.com/default/lambda_serverless_handler')
+          .then(res => {
+            dispatch(fetchProductsSuccess(res.data))
+            console.log(res)
+          })
+          .catch(err => {
+            dispatch(fetchProductsError(err))
+          })
+  }
+}
+
 export function fetchProductsPending() {
-  console.log('pending')
   return { type: FETCH_PRODUCTS_PENDING }
 }
 
 export function fetchProductsSuccess(products) {
-  console.log('success')
-  return { type: FETCH_PRODUCTS_SUCCESS, products: products }
+  return { type: FETCH_PRODUCTS_SUCCESS, products }
 }
+
 
 export function fetchProductsError(error) {
-  return { type: FETCH_PRODUCTS_ERROR, error: error }
+  return { type: FETCH_PRODUCTS_ERROR, error }
 }
 
-
 export function addProduct(product) {
-  console.log('addpro')
   return { type: ADD_PRODUCT, product }
 }
 
-export function fetchProducts() {
-  console.log('fetchProducts')
-  return (dispatch) => {
-    console.log('dispatch')
-    dispatch(fetchProductsSuccess())
-  }
-}
