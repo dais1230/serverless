@@ -5,10 +5,29 @@ import {
   Button,
   Page
 } from '@shopify/polaris';
-import { addProduct, fetchProducts } from '../actions/index';
 import Header from './Header';
+import {
+  fetchProducts,
+  addProduct,
+  removeProduct
+} from '../actions/index';
 
-const ProductDetails = ({ products, fetchProducts, addProduct }) => {
+const styles = {
+  buttons: {
+    width: '320px',
+    margin: '0px',
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
+}
+
+const ProductDetails = ({
+  products,
+  selectedProducts,
+  fetchProducts,
+  addProduct,
+  removeProduct
+}) => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null)
 
@@ -23,9 +42,16 @@ const ProductDetails = ({ products, fetchProducts, addProduct }) => {
     }
   }, [products, productId])
 
-  const handleClick = () => {
-    fetchProducts()
+  const handleClickAdd = () => {
     addProduct(product)
+  }
+
+  const handleClickRemove = () => {
+    removeProduct(product.id)
+  }
+
+  const selectedProductsCount = () => {
+    return selectedProducts.filter(sp => sp.id === product.id).length
   }
 
   return (
@@ -36,9 +62,13 @@ const ProductDetails = ({ products, fetchProducts, addProduct }) => {
           <div>
             <p>{product.title} / {product.price}円</p>
             <img alt="product_img" src={product.images} width="64px" height="64px" />
+            <div style={styles.buttons}>
+              <Button onClick={handleClickRemove}>カートから削除</Button>
+              <Button onClick={handleClickAdd}>カートに追加</Button>
+              <p style={{margin: '0'}}>個数: {selectedProductsCount()}個</p>
+            </div>
           </div>
         }
-        <Button onClick={handleClick}>カートに追加</Button>
       </Page>
     </div>
   )
@@ -46,11 +76,13 @@ const ProductDetails = ({ products, fetchProducts, addProduct }) => {
 
 const mapStateToProps = state => ({
   products: state.productReducer.products,
+  selectedProducts: state.productReducer.selectedProducts
 })
 
 const mapDispatchToProps = dispatch => ({
   fetchProducts: () => dispatch(fetchProducts()),
-  addProduct: product => dispatch(addProduct(product))
+  addProduct: product => dispatch(addProduct(product)),
+  removeProduct: id => dispatch(removeProduct(id))
 })
 
 export default connect(

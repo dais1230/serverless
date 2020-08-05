@@ -1,13 +1,15 @@
+import axios from 'axios'
+
 /*
  * action types
  */
-
-import axios from 'axios'
 
 export const FETCH_PRODUCTS_PENDING = 'FETCH_PRODUCTS_PENDING'
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS'
 export const FETCH_PRODUCTS_ERROR = 'FETCH_PRODUCTS_ERROR'
 export const ADD_PRODUCT = 'ADD_PRODUCT'
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
+
 /*
  * action creators
  */
@@ -43,3 +45,6 @@ export function addProduct(product) {
   return { type: ADD_PRODUCT, product }
 }
 
+export function removeProduct(id) {
+  return { type: REMOVE_PRODUCT, id }
+}

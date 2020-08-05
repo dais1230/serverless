@@ -4,6 +4,7 @@ import {
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_ERROR,
   ADD_PRODUCT,
+  REMOVE_PRODUCT
 } from '../actions/index'
 
 const initialState = {
@@ -36,6 +37,16 @@ function productReducer(state = initialState, action) {
       return {
         ...state,
         selectedProducts: [...state.selectedProducts, action.product]
+      }
+    case REMOVE_PRODUCT:
+      const index = state.selectedProducts.findIndex(p => p.id === action.id)
+      // index = -1 (該当するproductが見つからなかった場合)を除く
+      if (index >= 0) {
+        state.selectedProducts.splice(index, 1)
+      }
+      return {
+        ...state,
+        selectedProducts: [...state.selectedProducts]
       }
     default:
       return state

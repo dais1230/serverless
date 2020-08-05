@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
+  Button,
   List,
   Page
 } from '@shopify/polaris';
@@ -10,7 +11,7 @@ import Header from './Header';
 const Cart = ({ selectedProducts }) => {
   let purchaseButton;
   if (selectedProducts.length > 0) {
-    purchaseButton = <Link to={'/purchase'}>購入画面へ</Link>;
+    purchaseButton = <Button><Link to={'/purchase'}>購入画面へ</Link></Button>;
   } else {
     purchaseButton = <p>追加された商品はありません</p>;
   }
