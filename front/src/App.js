@@ -7,6 +7,7 @@ import ProductList from './components/ProductList';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
 import Purchase from './components/Purchase';
+import Complete from './components/Complete';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route exact path='/product/:productId' component={ProductDetails} />
         <Route exact path='/cart' component={Cart} />
         <Route exact path='/purchase' component={Purchase} />
+        <Route exact path='/complete' component={Complete} />
       </Switch>
     </Router>
   );
