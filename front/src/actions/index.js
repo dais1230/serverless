@@ -17,7 +17,7 @@ export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
 export function fetchProducts() {
   return async dispatch => {
     dispatch(fetchProductsPending())
-    await axios.get('https://d0jetp9lk6.execute-api.ap-northeast-1.amazonaws.com/default/lambda_serverless_handler')
+    await axios.get('https://o3au5rbodj.execute-api.ap-northeast-1.amazonaws.com/default/serverless-default-fetchProducts')
           .then(res => {
             dispatch(fetchProductsSuccess(res.data))
             console.log(res)
