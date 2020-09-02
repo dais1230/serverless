@@ -1,11 +1,7 @@
 require 'json'
-require 'logger'
 require 'shopify_api'
 
 def fetchProducts(event:, context:)
-  # ロガーの設定
-  logger = Logger.new($stdout)
-  
   shop_url = "https://#{ENV['API_KEY']}:#{ENV['PASSWORD']}@#{ENV['SHOP_NAME']}.myshopify.com"
   ShopifyAPI::Base.site = shop_url
   ShopifyAPI::Base.api_version = '2020-04'
@@ -32,14 +28,8 @@ def fetchProducts(event:, context:)
   
   #   # TODO implement
   headers = {
-    # "Content-Type": 'application/json',
-    # "Access-Control-Allow-Methods": "GET, POST",
     "Access-Control-Allow-Origin": "*"
   }
-  
-  # パラメータのバリデーション
-  request_body = event['body']
-  logger.info(request_body)
-  
+
   { statusCode: 200, headers: headers, body: JSON.generate(product_details) }
 end

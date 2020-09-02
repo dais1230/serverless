@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@shopify/app-bridge": "^1.26.2",
     "@shopify/polaris": "^4.26.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -10,6 +11,7 @@
     "aws-sdk": "^2.713.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.19",
     "react": "^16.13.1",
@@ -28,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "aws s3 sync build/ s3://serverless-default-serverlessdeploymentbucket-3me2pwt9zdo2"
   },
   "eslintConfig": {
     "extends": "react-app"

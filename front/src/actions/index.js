@@ -20,7 +20,6 @@ export function fetchProducts() {
     await axios.get('https://o3au5rbodj.execute-api.ap-northeast-1.amazonaws.com/default/serverless-default-fetchProducts')
           .then(res => {
             dispatch(fetchProductsSuccess(res.data))
-            console.log(res)
           })
           .catch(err => {
             dispatch(fetchProductsError(err))
