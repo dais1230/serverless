@@ -26,7 +26,6 @@ def fetchProducts(event:, context:)
   end
   puts "Processing #{product_details.length} products from Shopify..."
   
-  #   # TODO implement
   headers = {
     "Access-Control-Allow-Origin": "*"
   }
