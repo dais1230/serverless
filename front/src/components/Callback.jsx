@@ -1,37 +1,28 @@
 import React, { useEffect } from 'react';
 import { parse } from 'query-string';
 import axiosBase from 'axios';
+import { saveAccessToken } from '../actions';
 
 const Callback = (props) => {
-  const oauth = async (query) => {
+  const saveAccessToken = async (query) => {
+    const clientId = process.env.REACT_APP_SHOPIFY_API_KEY
+    const clientSecret = process.env.REACT_APP_SHOPIFY_API_SECRET
+    const code = query.code
+    const shopOrigin = process.env.REACT_APP_SHOP_ORIGIN
     const axios = axiosBase.create({
-      baseURL: process.env.REACT_APP_PUBLIC_API_URL,
+      baseURL: process.env.REACT_APP_SAVE_ACCESS_TOKEN_ENDPOINT,
       headers: {
         'Content-Type': 'application/json'
       },
       responseType: 'json'
     })
-    const res = await axios.get(`/oauth?code=${query.code}&shop=${query.shop}&hmac=${query.hmac}&state=${query.state}&timestamp=${query.timestamp}`)
-    return res
+    const res = await axios.get(`/?clientId=${clientId}&clientSecret=${clientSecret}&code=${code}&shopOrigin=${shopOrigin}`)
+    console.log(res)
   }
 
   useEffect(() => {
-    /**
-     *  Step 3: Confirm installation
-     *  3-1. Shopify アプリインストール確認画面で同意したら callback される
-     */
-
     const query = parse(props.location.search);
-    /**
-     *  3-2.hmac の検証
-     *  3-3.access_token,scope の取得と永続化
-     */
-    const token = oauth(query)
-    /**
-     *  Redirect
-     */
-    const redirectUri = `https://${query.shop}/admin/apps/${process.env.REACT_APP_SHOPIFY_API_KEY}/top`
-    window.location.assign(redirectUri);
+    saveAccessToken(query)
   })
 
   return (

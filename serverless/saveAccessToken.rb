@@ -1,19 +1,19 @@
 require 'json'
 require 'aws-sdk-dynamodb'
+require 'net/http'
+require 'uri'
 
 def saveAccessToken(event:, context:)
-  dynamodb = Aws::DynamoDB::Client.new(region: 'ap-northeast-1')
+  uri = URI.parse(`https://#{event["queryStringParameters"]["shopOrigin"]}/admin/oauth/access_token`)
+  response = Net::HTTP.post_form(uri, {
+    client_id: event["queryStringParameters"]["clientId"],
+    client_secret: event["queryStringParameters"]["clientSecret"],
+    code: event["queryStringParameters"]["code"]
+  })
 
-  item = {
-    id: '1',
-    name: 'fr-rd',
-    accessToken: 'wsnfli434r9rf094u53'
+  headers = {
+    "Access-Control-Allow-Origin": "*"
   }
 
-  params = {
-    table_name: 'Shop',
-    item: item
-  }
-
-  dynamodb.put_item(params)
+  { statusCode: 200, headers: headers, body: JSON.generate(response) }
 end
