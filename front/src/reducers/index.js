@@ -1,5 +1,8 @@
 import { combineReducers } from 'redux'
 import {
+  SAVE_ACCESS_TOKEN_PENDING,
+  SAVE_ACCESS_TOKEN_SUCCESS,
+  SAVE_ACCESS_TOKEN_ERROR,
   FETCH_PRODUCTS_PENDING,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_ERROR,
@@ -8,10 +11,35 @@ import {
 } from '../actions/index'
 
 const initialState = {
+  accessToken: null,
   error: null,
   pending: false,
   products: [],
   selectedProducts: []
+}
+
+function authReducer(state = initialState, action) {
+  switch (action.type) {
+    case SAVE_ACCESS_TOKEN_PENDING:
+      return {
+        ...state,
+        pending: true
+      }
+    case SAVE_ACCESS_TOKEN_SUCCESS:
+      return {
+        ...state,
+        pending: false,
+        accessToken: action.accessToken
+      }
+    case SAVE_ACCESS_TOKEN_ERROR:
+      return {
+        ...state,
+        pending: false,
+        error: action.error
+      }
+    default:
+      return state
+  }
 }
 
 function productReducer(state = initialState, action) {
@@ -54,6 +82,7 @@ function productReducer(state = initialState, action) {
 }
 
 const rootReducer = combineReducers({
+  authReducer,
   productReducer
 })
 

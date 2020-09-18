@@ -1,33 +1,33 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { parse } from 'query-string';
-import axiosBase from 'axios';
-import { saveAccessToken } from '../actions';
+
+import { saveAccessToken } from '../actions/index';
 
 const Callback = (props) => {
-  const saveAccessToken = async (query) => {
-    const clientId = process.env.REACT_APP_SHOPIFY_API_KEY
-    const clientSecret = process.env.REACT_APP_SHOPIFY_API_SECRET
-    const code = query.code
-    const shopOrigin = process.env.REACT_APP_SHOP_ORIGIN
-    const axios = axiosBase.create({
-      baseURL: process.env.REACT_APP_SAVE_ACCESS_TOKEN_ENDPOINT,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      responseType: 'json'
-    })
-    const res = await axios.get(`/?clientId=${clientId}&clientSecret=${clientSecret}&code=${code}&shopOrigin=${shopOrigin}`)
-    console.log(res)
-  }
-
   useEffect(() => {
+    console.log(props)
     const query = parse(props.location.search);
-    saveAccessToken(query)
-  })
+    props.saveAccessToken(query)
+
+    const redirectUri = `https://${query.shop}/admin/apps/${process.env.REACT_APP_SHOPIFY_API_KEY}`
+    window.location.assign(redirectUri);
+  }, [saveAccessToken]);
 
   return (
     <div>callback</div>
   )
 }
+const mapStateToProps = state => ({
+  accessToken: state.authReducer.accessToken,
+  products: state.productReducer.products
+})
 
-export default Callback
+const mapDispatchToProps = (dispatch) => ({
+  saveAccessToken: query => dispatch(saveAccessToken(query))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Callback)

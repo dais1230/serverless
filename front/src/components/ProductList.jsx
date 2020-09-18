@@ -9,9 +9,9 @@ import {
 import { fetchProducts } from '../actions/index';
 import Header from './Header';
 
-const ProductList = ({ products, fetchProducts }) => {
+const ProductList = ({ accessToken, products, fetchProducts }) => {
   useEffect(() => {
-    fetchProducts()
+    fetchProducts(accessToken)
   }, [fetchProducts]);
 
   return (
@@ -34,11 +34,12 @@ const ProductList = ({ products, fetchProducts }) => {
 }
 
 const mapStateToProps = state => ({
+  accessToken: state.authReducer.accessToken,
   products: state.productReducer.products
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchProducts: () => dispatch(fetchProducts())
+  fetchProducts: accessToken => dispatch(fetchProducts(accessToken))
 })
 
 export default connect(
