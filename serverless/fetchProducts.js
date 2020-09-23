@@ -1,12 +1,13 @@
 'use strict';
 const Shopify = require('shopify-api-node');
 
-module.exports.fetchProducts = (event, context, callback) => {
+module.exports.fetchProducts = async (event, context, callback) => {
   const shopify = new Shopify({
     shopName: event["queryStringParameters"]["shopName"],
-    apiKey: event["queryStringParameters"]["apiKey"],
-    password: event["queryStringParameters"]["accessToken"]
+    accessToken: event["queryStringParameters"]["accessToken"],
   });
+
+  const params = { limit: 10 };
 
   const products = await shopify.product.list(params);
 

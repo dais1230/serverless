@@ -33,7 +33,6 @@ export function saveAccessToken(query) {
     })
     await axios.get(`/?clientId=${clientId}&clientSecret=${clientSecret}&code=${code}&shopOrigin=${shopOrigin}`)
                 .then(res => {
-                  console.log(res)
                   dispatch(saveAccessTokenSuccess(res.data.access_token))
                 })
                 .catch(err => {
@@ -57,7 +56,6 @@ export function saveAccessTokenError(error) {
 export function fetchProducts(token) {
   return async dispatch => {
     dispatch(fetchProductsPending())
-    const apiKey = process.env.REACT_APP_SHOPIFY_API_KEY
     const accessToken = token
     const shopName = process.env.REACT_APP_SHOP_ORIGIN
     const axios = axiosBase.create({
@@ -67,10 +65,9 @@ export function fetchProducts(token) {
       },
       responseType: "json"
     })
-    await axios.get(`/?accessToken=${accessToken}&apiKey=${apiKey}&shopName=${shopName}`)
+    await axios.get(`/?accessToken=${accessToken}&shopName=${shopName}`)
                 .then(res => {
-                  console.log(res)
-                  dispatch(fetchProductsSuccess(res.data))
+                  dispatch(fetchProductsSuccess(res.data.products))
                 })
                 .catch(err => {
                   dispatch(fetchProductsError(err))

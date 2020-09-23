@@ -22,8 +22,8 @@ const ProductList = ({ accessToken, products, fetchProducts }) => {
           {products && products.map((p, index) => (
             <List.Item key={index}>
               <Link to={`/product/${p.id}`}>
-                <p>{p.title} / {p.price}円</p>
-                <img alt="product_img" src={p.images} width="64px" height="64px" />
+                <p>{p.title} / {p.variants[0].price}円</p>
+                <img alt="product_img" src={p.images[0].src} width="64px" height="64px" />
               </Link>
             </List.Item>
           ))}

@@ -6,7 +6,6 @@ import { saveAccessToken } from '../actions/index';
 
 const Callback = (props) => {
   useEffect(() => {
-    console.log(props)
     const query = parse(props.location.search);
     props.saveAccessToken(query)
 
