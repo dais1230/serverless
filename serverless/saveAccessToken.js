@@ -2,6 +2,9 @@
 const axiosBase = require('axios');
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
+// Set the region and create the DynamoDB service object
+AWS.config.update({region: 'ap-northeast-1'});
+const ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 module.exports.saveAccessToken = async (event, context, callback) => {
   const axios = axiosBase.create({
@@ -18,20 +21,15 @@ module.exports.saveAccessToken = async (event, context, callback) => {
     code: event["queryStringParameters"]["code"]
   })
 
-  // Set the region
-  AWS.config.update({region: 'REGION'});
-
-  // Create the DynamoDB service object
-  var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
-
-  var params = {
+  const params = {
     TableName: 'Shop',
     Item: {
-      'id' : {S: '001'}
+      id : {S: uuidv4()},
+      shopName: {S: event["queryStringParameters"]["shopOrigin"]},
+      accessToken: {S: res.data.access_token}
     }
   };
 
-  // Call DynamoDB to add the item to the table
   ddb.putItem(params, function(err, data) {
     if (err) {
       console.log("Error", err);
