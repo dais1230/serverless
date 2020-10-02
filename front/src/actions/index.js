@@ -1,4 +1,5 @@
 import axiosBase from 'axios';
+import instance from '../sessionToken';
 
 /*
  * action types
@@ -61,7 +62,8 @@ export function fetchProducts(token) {
     const axios = axiosBase.create({
       baseURL: process.env.REACT_APP_FETCH_PRODUCTS_ENDPOINT,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': instance
       },
       responseType: "json"
     })
