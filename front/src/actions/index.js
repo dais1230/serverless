@@ -24,6 +24,7 @@ export function saveAccessToken(query) {
     const clientId = process.env.REACT_APP_SHOPIFY_API_KEY
     const clientSecret = process.env.REACT_APP_SHOPIFY_API_SECRET
     const code = query.code
+    const hmac = query.hmac
     const shopOrigin = query.shop
     const axios = axiosBase.create({
       baseURL: process.env.REACT_APP_SAVE_ACCESS_TOKEN_ENDPOINT,
@@ -32,7 +33,7 @@ export function saveAccessToken(query) {
       },
       responseType: "json"
     })
-    await axios.get(`/?clientId=${clientId}&clientSecret=${clientSecret}&code=${code}&shopOrigin=${shopOrigin}`)
+    await axios.get(`/?clientId=${clientId}&clientSecret=${clientSecret}&code=${code}&hmac=${hmac}&shopOrigin=${shopOrigin}`)
                 .then(res => {
                   dispatch(saveAccessTokenSuccess(res.data.access_token))
                 })
