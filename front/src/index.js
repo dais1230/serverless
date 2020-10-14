@@ -31,8 +31,7 @@ const app = createApp({
 const client = new ApolloClient({
   link: new HttpLink({
     credentials: 'same-origin',
-    fetch: authenticatedFetch(app), // created in shopify_app.js
-    uri: '/graphql'
+    fetch: authenticatedFetch(app)
   }),
   cache: new InMemoryCache()
 });
