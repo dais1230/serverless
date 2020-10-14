@@ -22,6 +22,7 @@ const styles = {
 }
 
 const ProductDetails = ({
+  accessToken,
   products,
   selectedProducts,
   fetchProducts,
@@ -32,7 +33,7 @@ const ProductDetails = ({
   const [product, setProduct] = useState(null)
 
   useEffect(() => {
-    fetchProducts()
+    fetchProducts(accessToken)
   }, [fetchProducts])
 
   // for preventing infinite loop, make second useEffect for setting product
@@ -75,6 +76,7 @@ const ProductDetails = ({
 }
 
 const mapStateToProps = state => ({
+  accessToken: state.authReducer.accessToken,
   products: state.productReducer.products,
   selectedProducts: state.productReducer.selectedProducts
 })
