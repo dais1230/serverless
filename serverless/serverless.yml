@@ -108,10 +108,10 @@ resources:
       Properties:
         TableName: Shop
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: shopName
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: shopName
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
