@@ -1,4 +1,6 @@
 import axiosBase from 'axios';
+import app from '../appBridge'
+import { getSessionToken } from '@shopify/app-bridge-utils';
 
 /*
  * action types
@@ -16,6 +18,20 @@ export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
 /*
  * action creators
  */
+
+export function verifyShop(shopOrigin) {
+  return async () => {
+    const axios = axiosBase.create({
+      baseURL: process.env.REACT_APP_FETCH_SHOP_ENDPOINT,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      responseType: 'json'
+    })
+    const res = await axios.get(`?shopOrigin=${shopOrigin}`)
+    return res.data.shopExist
+  }
+}
 
 export function saveAccessToken(query) {
   return async dispatch => {
@@ -57,16 +73,18 @@ export function saveAccessTokenError(error) {
 export function fetchProducts(token) {
   return async dispatch => {
     dispatch(fetchProductsPending())
+    const sessionToken = await getSessionToken(app)
+    const apiKey = process.env.REACT_APP_SHOPIFY_API_KEY
     const accessToken = token
     const shopName = process.env.REACT_APP_SHOP_ORIGIN
     const axios = axiosBase.create({
       baseURL: process.env.REACT_APP_FETCH_PRODUCTS_ENDPOINT,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       responseType: "json"
     })
-    await axios.get(`/?accessToken=${accessToken}&shopName=${shopName}`)
+    await axios.get(`/?accessToken=${accessToken}&apiKey=${apiKey}&sessionToken=${sessionToken}&shopName=${shopName}`)
                 .then(res => {
                   dispatch(fetchProductsSuccess(res.data.products))
                 })

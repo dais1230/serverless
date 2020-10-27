@@ -12,7 +12,6 @@ import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import { PersistGate } from 'redux-persist/integration/react'
-import createApp from '@shopify/app-bridge';
 import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import {
   ApolloClient,
@@ -20,13 +19,11 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
+import app from './appBridge'
 
 require('dotenv').config()
 
-const app = createApp({
-  apiKey: process.env.REACT_APP_SHOPIFY_API_KEY,
-  shopOrigin: process.env.REACT_APP_SHOP_ORIGIN
-})
+
 
 const client = new ApolloClient({
   link: new HttpLink({
