@@ -74,17 +74,19 @@ export function fetchProducts(token) {
   return async dispatch => {
     dispatch(fetchProductsPending())
     const sessionToken = await getSessionToken(app)
+    const authorizationHeader = `Bearer ${sessionToken}`
     const apiKey = process.env.REACT_APP_SHOPIFY_API_KEY
-    const accessToken = token
+    const apiSecret = process.env.REACT_APP_SHOPIFY_API_SECRET
     const shopName = process.env.REACT_APP_SHOP_ORIGIN
     const axios = axiosBase.create({
       baseURL: process.env.REACT_APP_FETCH_PRODUCTS_ENDPOINT,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": authorizationHeader
       },
       responseType: "json"
     })
-    await axios.get(`/?accessToken=${accessToken}&apiKey=${apiKey}&sessionToken=${sessionToken}&shopName=${shopName}`)
+    await axios.get(`/?accessToken=${token}&apiKey=${apiKey}&apiSecret=${apiSecret}&shopName=${shopName}`)
                 .then(res => {
                   dispatch(fetchProductsSuccess(res.data.products))
                 })
