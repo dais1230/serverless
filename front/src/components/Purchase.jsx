@@ -7,6 +7,8 @@ import Header from './Header';
 import rock from '../assets/img/rock.png'
 import scissors from '../assets/img/scissors.png'
 import paper from '../assets/img/paper.png'
+import { useEffect } from 'react';
+import { validateSessionToken } from '../actions/index';
 
 const styles = {
   cursor: {
@@ -23,10 +25,14 @@ const styles = {
   }
 }
 
-const Purchase = ({ selectedProducts }) => {
+const Purchase = ({ selectedProducts, validateSessionToken }) => {
   const [opponentHand, setOpponentHand] = useState('')
   const [opponentHandStatus, setOpponentHandStatus] = useState(false)
   const [result, setResult] = useState('')
+
+  useEffect(() => {
+    validateSessionToken()
+  }, [validateSessionToken])
 
   const handleClick = (userHand) => {
     if ((result !== "勝ち") && (result !== "負け")) {
@@ -127,6 +133,11 @@ const mapStateToProps = state => ({
   selectedProducts: state.productReducer.selectedProducts
 })
 
+const mapDispatchToProps = dispatch => ({
+  validateSessionToken: () => dispatch(validateSessionToken())
+})
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Purchase)

@@ -19,6 +19,25 @@ export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
  * action creators
  */
 
+export function validateSessionToken() {
+  return async () => {
+    const sessionToken = await getSessionToken(app)
+    const authorizationHeader = `Bearer ${sessionToken}`
+    const apiKey = process.env.REACT_APP_SHOPIFY_API_KEY
+    const apiSecret = process.env.REACT_APP_SHOPIFY_API_SECRET
+    const shopName = process.env.REACT_APP_SHOP_ORIGIN
+    const axios = axiosBase.create({
+      baseURL: process.env.REACT_APP_VALIDATE_SESSION_TOKEN_ENDPOINT,
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": authorizationHeader
+      },
+      responseType: 'json'
+    })
+    const res = await axios.get(`/apiKey=${apiKey}&apiSecret=${apiSecret}&shopName=${shopName}`)
+  }
+}
+
 export function verifyShop(shopOrigin) {
   return async () => {
     const axios = axiosBase.create({

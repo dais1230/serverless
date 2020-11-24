@@ -7,8 +7,10 @@ import {
   Page
 } from '@shopify/polaris';
 import Header from './Header';
+import { validateSessionToken } from '../actions/index';
+import { useEffect } from 'react';
 
-const Cart = ({ selectedProducts }) => {
+const Cart = ({ selectedProducts, validateSessionToken }) => {
   let purchaseButton;
   if (selectedProducts.length > 0) {
     purchaseButton = <Button><Link to={'/purchase'}>購入画面へ</Link></Button>;
@@ -23,6 +25,10 @@ const Cart = ({ selectedProducts }) => {
     })
     return totalPrice
   }
+
+  useEffect(() => {
+    validateSessionToken()
+  }, [validateSessionToken])
 
   return (
     <div>
@@ -48,6 +54,11 @@ const mapStateToProps = state => ({
   selectedProducts: state.productReducer.selectedProducts
 })
 
+const mapDispatchToProps = dispatch => ({
+  validateSessionToken: () => dispatch(validateSessionToken())
+})
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Cart)

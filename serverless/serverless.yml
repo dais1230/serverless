@@ -37,6 +37,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - lambda:InvokeFunction
       Resource: "*"
 
 # you can define service wide environment variables here
@@ -59,6 +60,8 @@ functions:
     handler: fetchShop.fetchShop
   saveAccessToken:
     handler: saveAccessToken.saveAccessToken
+  validateSessionToken:
+    handler: validateSessionToken.validateSessionToken
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

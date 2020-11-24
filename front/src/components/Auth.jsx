@@ -26,14 +26,15 @@ const Auth = ({ verifyShop }) => {
             window.location.assign(process.env.REACT_APP_APPLICATION_URL);
           // If the current window is the 'child', change the parent's URL with Shopify App Bridge's Redirect action
           } else {
-            Redirect.create(app).dispatch(Redirect.Action.ADMIN_PATH, process.env.REACT_APP_APPLICATION_URL + '/top');
+            Redirect.create(app).dispatch(Redirect.Action.ADMIN_PATH, process.env.REACT_APP_APPLICATION_URL);
           }
-        }
-        if (window.top === window.self) {
-          window.location.assign(permissionUrl);
-        // If the current window is the 'child', change the parent's URL with Shopify App Bridge's Redirect action
         } else {
-          Redirect.create(window.app).dispatch(Redirect.Action.REMOTE, permissionUrl);
+          if (window.top === window.self) {
+            window.location.assign(permissionUrl);
+          // If the current window is the 'child', change the parent's URL with Shopify App Bridge's Redirect action
+          } else {
+            Redirect.create(app).dispatch(Redirect.Action.REMOTE, permissionUrl);
+          }
         }
       })
       .catch(err => {
