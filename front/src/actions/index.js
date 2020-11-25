@@ -34,7 +34,7 @@ export function validateSessionToken() {
       },
       responseType: 'json'
     })
-    const res = await axios.get(`/apiKey=${apiKey}&apiSecret=${apiSecret}&shopName=${shopName}`)
+    const res = await axios.get(`/?apiKey=${apiKey}&apiSecret=${apiSecret}&shopName=${shopName}`)
   }
 }
 

@@ -62,7 +62,7 @@ module.exports.validateSessionToken = async (event, context, callback) => {
       "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
       "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, PATCH, OPTIONS"
     },
-    body: JSON.stringify({shopExist}),
+    body: JSON.stringify(shopExist),
   };
 
   return response;
