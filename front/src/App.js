@@ -10,6 +10,7 @@ import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
 import Purchase from './components/Purchase';
 import Complete from './components/Complete';
+import Error from './components/Error';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route exact path='/cart' component={Cart} />
         <Route exact path='/purchase' component={Purchase} />
         <Route exact path='/complete' component={Complete} />
+        <Route exact path='/error' component={Error} />
       </Switch>
     </Router>
   );
