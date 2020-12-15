@@ -7,16 +7,17 @@ const jwt_decode = require('jwt-decode');
 const isVerified = require("shopify-jwt-auth-verify")['default']
 
 module.exports.validateSessionToken = async (event, context, callback) => {
+  let status = null
   if (!event) {
     return
   }
   if (event.headers.Authorization) {
     const decoded = jwt_decode(event.headers.Authorization.split(' ')[1])
     if (Date.now() >= decoded.exp * 1000) {
-      return
+      status = 'expired'
     }
     if (Date.now() <= decoded.nbf * 1000) {
-      return
+      status = 'expired'
     }
     if (decoded.dest !== `https://${event["queryStringParameters"]["shopName"]}`) {
       return
@@ -26,33 +27,34 @@ module.exports.validateSessionToken = async (event, context, callback) => {
     }
 
     const verified = isVerified(event.headers.Authorization, event["queryStringParameters"]["apiSecret"])
-    if (!verified) {
+    if (!verified && status !== 'expired') {
       return
     }
   }
 
-  const params = {
-    TableName: 'Shop',
-    Key: {
-      shopName: {
-        S: event["queryStringParameters"]["shopName"]
+  if (status !== 'expired') {
+    const params = {
+      TableName: 'Shop',
+      Key: {
+        shopName: {
+          S: event["queryStringParameters"]["shopName"]
+        }
       }
     }
-  }
 
-  let res = {}
-  let shopExist = false
+    let res = {}
 
-  await ddb.getItem(params, function(err, data) {
-    if (err) {
-      console.log("err", err);
-    } else {
-      res = data
+    await ddb.getItem(params, function(err, data) {
+      if (err) {
+        console.log("err", err);
+      } else {
+        res = data
+      }
+    }).promise();
+
+    if (Object.keys(res).length !== 0) {
+      status = 'valid'
     }
-  }).promise();
-
-  if (Object.keys(res).length !== 0) {
-    shopExist = true
   }
 
   const response = {
@@ -62,7 +64,7 @@ module.exports.validateSessionToken = async (event, context, callback) => {
       "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
       "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, PATCH, OPTIONS"
     },
-    body: JSON.stringify(shopExist),
+    body: JSON.stringify(status),
   };
 
   return response;

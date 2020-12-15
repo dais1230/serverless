@@ -6,21 +6,6 @@ AWS.config.update({region: 'ap-northeast-1'});
 const ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 module.exports.fetchProducts = async (event, context, callback) => {
-  let lambda = new AWS.Lambda({region: 'ap-northeast-1'})
-  const param = {
-    FunctionName: "serverless-default-validateSessionToken", // Lambda 関数の ARN を指定
-    Payload: JSON.stringify(event)
-  };
-
-  lambda.invoke(param, (error, data) => {
-    if (error) {
-      context.done('error', error);
-    }
-    if(data.Payload){
-      context.succeed(data.Payload)
-    }
-  });
-
   const params = {
     TableName: 'Shop',
     Key: {
