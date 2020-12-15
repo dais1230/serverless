@@ -33,7 +33,7 @@ const Auth = ({ verifyShop }) => {
       .catch(err => {
         console.log('err', err)
       })
-  }, []);
+  }, [verifyShop, shopOrigin, permissionUrl]);
 
   return (
     <div></div>

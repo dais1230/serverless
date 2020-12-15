@@ -10,7 +10,7 @@ import Header from './Header';
 import { validateSessionToken } from '../actions/index';
 import { useEffect } from 'react';
 
-const Cart = ({ selectedProducts, validateSessionToken }) => {
+const Cart = ({ accessToken, sessionToken, selectedProducts, validateSessionToken }) => {
   let purchaseButton;
   if (selectedProducts.length > 0) {
     purchaseButton = <Button><Link to={'/purchase'}>購入画面へ</Link></Button>;
@@ -27,8 +27,8 @@ const Cart = ({ selectedProducts, validateSessionToken }) => {
   }
 
   useEffect(() => {
-    validateSessionToken()
-  }, [validateSessionToken])
+    validateSessionToken(accessToken, sessionToken)
+  }, [validateSessionToken, accessToken, sessionToken])
 
   return (
     <div>
@@ -51,11 +51,13 @@ const Cart = ({ selectedProducts, validateSessionToken }) => {
 }
 
 const mapStateToProps = state => ({
+  accessToken: state.authReducer.accessToken,
+  sessionToken: state.sessionReducer.sessionToken,
   selectedProducts: state.productReducer.selectedProducts
 })
 
 const mapDispatchToProps = dispatch => ({
-  validateSessionToken: () => dispatch(validateSessionToken())
+  validateSessionToken: (accessToken, sessionToken) => dispatch(validateSessionToken(accessToken, sessionToken))
 })
 
 export default connect(

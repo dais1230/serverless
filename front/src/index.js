@@ -6,11 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import {AppProvider} from "@shopify/polaris";
 import ja from '@shopify/polaris/locales/ja.json';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux'
-import rootReducer from '../src/reducers/index'
-import thunk from 'redux-thunk';
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import {
@@ -19,6 +15,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
+import store from './store'
 import app from './appBridge'
 
 require('dotenv').config()
@@ -33,14 +30,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const persistConfig = {
-  key: 'root',
-  storage,
-}
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
-const store = createStore(persistedReducer, applyMiddleware(thunk))
 const persistor = persistStore(store)
 
 
@@ -63,3 +52,5 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+export default store;

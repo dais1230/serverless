@@ -6,17 +6,14 @@ import {
   Page
 } from '@shopify/polaris';
 
-import { fetchProducts, validateSessionToken } from '../actions/index';
+import { validateSessionToken } from '../actions/index';
 import Header from './Header';
 
-const ProductList = ({ accessToken, products, fetchProducts, validateSessionToken }) => {
+const ProductList = ({ accessToken, sessionToken, products, validateSessionToken }) => {
   useEffect(() => {
-    validateSessionToken(accessToken)
-  }, [validateSessionToken])
+    validateSessionToken(accessToken, sessionToken, true)
+  }, [validateSessionToken, accessToken, sessionToken]);
 
-  useEffect(() => {
-    fetchProducts(accessToken)
-  }, [fetchProducts]);
 
   return (
     <div>
@@ -39,12 +36,12 @@ const ProductList = ({ accessToken, products, fetchProducts, validateSessionToke
 
 const mapStateToProps = state => ({
   accessToken: state.authReducer.accessToken,
+  sessionToken: state.sessionReducer.sessionToken,
   products: state.productReducer.products
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchProducts: accessToken => dispatch(fetchProducts(accessToken)),
-  validateSessionToken: accessToken => dispatch(validateSessionToken(accessToken))
+  validateSessionToken: (accessToken, sessionToken, fetchProducts) => dispatch(validateSessionToken(accessToken, sessionToken, fetchProducts)),
 })
 
 export default connect(

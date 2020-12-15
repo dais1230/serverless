@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { parse } from 'query-string';
 
-import { saveAccessToken } from '../actions/index';
+import { saveAccessToken, setSessionToken } from '../actions/index';
 
 const Callback = (props) => {
   useEffect(() => {
@@ -11,19 +11,21 @@ const Callback = (props) => {
 
     const redirectUri = `https://${query.shop}/admin/apps/${process.env.REACT_APP_SHOPIFY_API_KEY}`
     window.location.assign(redirectUri);
-  }, [saveAccessToken]);
+  }, [props]);
+
+  useEffect(() => {
+    props.setSessionToken()
+  }, [props])
 
   return (
-    <div>callback</div>
+    <div></div>
   )
 }
-const mapStateToProps = state => ({
-  accessToken: state.authReducer.accessToken,
-  products: state.productReducer.products
-})
+const mapStateToProps = () => ({})
 
 const mapDispatchToProps = (dispatch) => ({
-  saveAccessToken: query => dispatch(saveAccessToken(query))
+  saveAccessToken: query => dispatch(saveAccessToken(query)),
+  setSessionToken: () => dispatch(setSessionToken())
 })
 
 export default connect(

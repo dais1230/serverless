@@ -1,5 +1,8 @@
 import { combineReducers } from 'redux'
 import {
+  SAVE_SESSION_TOKEN_PENDING,
+  SAVE_SESSION_TOKEN_SUCCESS,
+  SAVE_SESSION_TOKEN_ERROR,
   SAVE_ACCESS_TOKEN_PENDING,
   SAVE_ACCESS_TOKEN_SUCCESS,
   SAVE_ACCESS_TOKEN_ERROR,
@@ -15,7 +18,32 @@ const initialState = {
   error: null,
   pending: false,
   products: [],
-  selectedProducts: []
+  selectedProducts: [],
+  sessionToken: null
+}
+
+function sessionReducer(state = initialState, action) {
+  switch (action.type) {
+    case SAVE_SESSION_TOKEN_PENDING:
+      return {
+        ...state,
+        pending: true
+      }
+    case SAVE_SESSION_TOKEN_SUCCESS:
+      return {
+        ...state,
+        pending: false,
+        sessionToken: action.sessionToken
+      }
+    case SAVE_SESSION_TOKEN_ERROR:
+      return {
+        ...state,
+        pending: false,
+        error: action.error
+      }
+    default:
+      return state
+  }
 }
 
 function authReducer(state = initialState, action) {
@@ -82,6 +110,7 @@ function productReducer(state = initialState, action) {
 }
 
 const rootReducer = combineReducers({
+  sessionReducer,
   authReducer,
   productReducer
 })

@@ -7,9 +7,9 @@ import {
 } from '@shopify/polaris';
 import Header from './Header';
 import {
-  fetchProducts,
   addProduct,
-  removeProduct
+  removeProduct,
+  validateSessionToken
 } from '../actions/index';
 
 const styles = {
@@ -23,18 +23,19 @@ const styles = {
 
 const ProductDetails = ({
   accessToken,
+  sessionToken,
   products,
   selectedProducts,
-  fetchProducts,
   addProduct,
-  removeProduct
+  removeProduct,
+  validateSessionToken
 }) => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null)
 
   useEffect(() => {
-    fetchProducts(accessToken)
-  }, [fetchProducts])
+    validateSessionToken(accessToken, sessionToken, true)
+  }, [validateSessionToken, accessToken, sessionToken])
 
   // for preventing infinite loop, make second useEffect for setting product
   useEffect(() => {
@@ -77,12 +78,13 @@ const ProductDetails = ({
 
 const mapStateToProps = state => ({
   accessToken: state.authReducer.accessToken,
+  sessionToken: state.sessionReducer.sessionToken,
   products: state.productReducer.products,
   selectedProducts: state.productReducer.selectedProducts
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchProducts: () => dispatch(fetchProducts()),
+  validateSessionToken: (accessToken, sessionToken, fetchProducts) => dispatch(validateSessionToken(accessToken, sessionToken, fetchProducts)),
   addProduct: product => dispatch(addProduct(product)),
   removeProduct: id => dispatch(removeProduct(id))
 })

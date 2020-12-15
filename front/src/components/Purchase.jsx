@@ -25,14 +25,14 @@ const styles = {
   }
 }
 
-const Purchase = ({ selectedProducts, validateSessionToken }) => {
+const Purchase = ({ accessToken, sessionToken, selectedProducts, validateSessionToken }) => {
   const [opponentHand, setOpponentHand] = useState('')
   const [opponentHandStatus, setOpponentHandStatus] = useState(false)
   const [result, setResult] = useState('')
 
   useEffect(() => {
-    validateSessionToken()
-  }, [validateSessionToken])
+    validateSessionToken(accessToken, sessionToken)
+  }, [validateSessionToken, accessToken, sessionToken])
 
   const handleClick = (userHand) => {
     if ((result !== "勝ち") && (result !== "負け")) {
@@ -130,11 +130,13 @@ const Purchase = ({ selectedProducts, validateSessionToken }) => {
 }
 
 const mapStateToProps = state => ({
+  accessToken: state.authReducer.accessToken,
+  sessionToken: state.sessionReducer.sessionToken,
   selectedProducts: state.productReducer.selectedProducts
 })
 
 const mapDispatchToProps = dispatch => ({
-  validateSessionToken: () => dispatch(validateSessionToken())
+  validateSessionToken: (accessToken, sessionToken) => dispatch(validateSessionToken(accessToken, sessionToken))
 })
 
 export default connect(

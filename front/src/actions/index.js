@@ -1,11 +1,16 @@
 import axiosBase from 'axios';
 import app from '../appBridge'
 import { getSessionToken } from '@shopify/app-bridge-utils';
-
+import store from '../store'
+import watch from 'redux-watch'
+import { history } from '../helpers/history'
 /*
  * action types
  */
 
+export const SAVE_SESSION_TOKEN_PENDING = 'SAVE_SESSION_TOKEN_PENDING'
+export const SAVE_SESSION_TOKEN_SUCCESS = 'SAVE_SESSION_TOKEN_SUCCESS'
+export const SAVE_SESSION_TOKEN_ERROR = 'SAVE_SESSION_TOKEN_ERROR'
 export const SAVE_ACCESS_TOKEN_PENDING = 'SAVE_ACCESS_TOKEN_PENDING'
 export const SAVE_ACCESS_TOKEN_SUCCESS = 'SAVE_ACCESS_TOKEN_SUCCESS'
 export const SAVE_ACCESS_TOKEN_ERROR = 'SAVE_ACCESS_TOKEN_ERROR'
@@ -19,9 +24,43 @@ export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
  * action creators
  */
 
-export function validateSessionToken() {
-  return async () => {
-    const sessionToken = await getSessionToken(app)
+
+export function setSessionToken() {
+  return async dispatch => {
+    dispatch(saveSessionTokenPending())
+    await getSessionToken(app)
+    .then(res => {
+      dispatch(saveSessionTokenSuccess(res))
+    })
+    .catch(err => {
+      dispatch(saveSessionTokenError(err))
+    })
+  }
+}
+
+// watch session token update
+let w = watch(store.getState, 'sessionReducer.sessionToken')
+store.subscribe(w((newVal, oldVal) => {
+  if (newVal !== oldVal && oldVal) {
+    const accessToken = store.getState().authReducer.accessToken
+    store.dispatch(validateSessionToken(accessToken, newVal, true))
+  }
+}))
+
+export function saveSessionTokenPending() {
+  return { type: SAVE_SESSION_TOKEN_PENDING }
+}
+
+export function saveSessionTokenSuccess(sessionToken) {
+  return { type: SAVE_SESSION_TOKEN_SUCCESS, sessionToken }
+}
+
+export function saveSessionTokenError(error) {
+  return { type: SAVE_SESSION_TOKEN_ERROR, error }
+}
+
+export function validateSessionToken(accessToken, sessionToken, products = false) {
+  return async dispatch => {
     const authorizationHeader = `Bearer ${sessionToken}`
     const apiKey = process.env.REACT_APP_SHOPIFY_API_KEY
     const apiSecret = process.env.REACT_APP_SHOPIFY_API_SECRET
@@ -35,6 +74,17 @@ export function validateSessionToken() {
       responseType: 'json'
     })
     await axios.get(`/?apiKey=${apiKey}&apiSecret=${apiSecret}&shopName=${shopName}`)
+                .then(res => {
+                  if (res.data === 'valid' && products) {
+                    dispatch(fetchProducts(accessToken))
+                  }
+                  if (res.data === 'expired') {
+                    dispatch(setSessionToken())
+                  }
+                })
+                .catch(err => {
+                  history.push('/error')
+                })
   }
 }
 
@@ -89,23 +139,20 @@ export function saveAccessTokenError(error) {
   return { type: SAVE_ACCESS_TOKEN_ERROR, error }
 }
 
-export function fetchProducts(token) {
+export function fetchProducts(accessToken) {
   return async dispatch => {
     dispatch(fetchProductsPending())
-    const sessionToken = await getSessionToken(app)
-    const authorizationHeader = `Bearer ${sessionToken}`
     const apiKey = process.env.REACT_APP_SHOPIFY_API_KEY
     const apiSecret = process.env.REACT_APP_SHOPIFY_API_SECRET
     const shopName = process.env.REACT_APP_SHOP_ORIGIN
     const axios = axiosBase.create({
       baseURL: process.env.REACT_APP_FETCH_PRODUCTS_ENDPOINT,
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": authorizationHeader
+        "Content-Type": "application/json"
       },
       responseType: "json"
     })
-    await axios.get(`/?accessToken=${token}&apiKey=${apiKey}&apiSecret=${apiSecret}&shopName=${shopName}`)
+    await axios.get(`/?accessToken=${accessToken}&apiKey=${apiKey}&apiSecret=${apiSecret}&shopName=${shopName}`)
                 .then(res => {
                   dispatch(fetchProductsSuccess(res.data.products))
                 })
